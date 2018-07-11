@@ -1,7 +1,8 @@
 "use strict"
 
 function diceRoll(row) {
-	return 1+ Math.floor(Math.random() * Math.floor(row/2));
+	//the value of dice is 1 to half of the track length
+	return 1 + Math.floor(Math.random() * Math.floor(row/2));
 }
 
 function sleep (milliseconds) {
@@ -20,28 +21,27 @@ function printBoard (playerPosData, trackLength) {
 }
 
 function printLine (playerName, pos,trackLength) {
+	//print a player on track based on input position 
 	let line = [];
 	for(let j = 0 ; j < trackLength; j++){
-		if(j===pos){
-			line.push(playerName);
-		}
-		else{
-			line.push(" ");
-		}
+		line.push(j===pos ? playerName : " ");
 	}
 	return "|"+line.join("|")+"|"+(pos>trackLength-1 ? playerName:"");
 }
 
 function advance (playerName, playerPosData, trackLength) {
+	//edit player position based on advancement
 	let advancement = diceRoll(trackLength);
 	playerPosData[playerName] += advancement;
 }
 
 function finished(winnerPlayer) {
+	//What to do after finished?
 	console.log(`Player ${winnerPlayer} is the Winner`);
 }
 
 function winner (playerPosData, trackLength) {
+	//check who is the winner
 	for(let playerName in playerPosData){
 		if(playerPosData[playerName] >= trackLength) return playerName;
 	}
@@ -54,20 +54,8 @@ function clearScreen () {
 	console.clear();
 }
 
-function generateBoard(howManyPlayer, trackLength){
-	let output = [];
-	for(let i = 0 ; i < howManyPlayer ; i++){
-		output.push([]);
-		for(let j = 0 ; j < trackLength; j++){
-			output[i].push((j===0?String.fromCharCode(i+97):" "));
-		}
-	}
-
-	return output;
-
-}
-
 function generatePLayer(howManyPlayer){
+	//generate player position data
 	let output = {};
 	for(let i = 0 ; i < howManyPlayer; i++){
 		output[String.fromCharCode(i+97)] = 0;
@@ -78,14 +66,10 @@ function generatePLayer(howManyPlayer){
 function startJsRacer(terminalInput){
 	let howManyPlayer = terminalInput[2];
 	let trackLength =  terminalInput[3];
-	let playerPosData = generatePLayer(terminalInput[2]);
+	let playerPosData = generatePLayer(howManyPlayer);
 	let winnerPlayer = "";
 	let stopGame = false;
-	//printBoard(board);
-	console.log(playerPosData);
-
-	//roll dice and advance a
-
+	
 	while(!stopGame){
 		for(let player = 0 ; player < howManyPlayer ; player++){
 			advance(String.fromCharCode(player+97), playerPosData, trackLength);
