@@ -3,8 +3,8 @@ const argv = process.argv.slice(2);
 // var jumPemain = argv[0]
 // var panTrack = argv[1]
 
-var numOfPlayers = 3
-var track = 15
+var numOfPlayers = Number(argv[0])
+var track = Number(argv[1])
 var players = generatePlayers(numOfPlayers);
 let randomTrap = Math.round(Math.random()*(track-1));
 let randomBoost = Math.round(Math.random()*(track-1));
@@ -31,11 +31,11 @@ function generatePlayers(numOfPlayers){
 
 function diceRoll () {
   let randomDice = Math.random()*6;
-  let result = Math.round(randomDice);
+  let result = Math.trunc(randomDice+1);
   return result
 }
 
-// console.log(diceRoll())
+console.log(diceRoll())
 
 function sleep (milliseconds) {
   var start = new Date().getTime();
@@ -47,65 +47,45 @@ function sleep (milliseconds) {
 }
 
 function printBoard() {
-  let result = []
-  // while(finished()){
-  //   // let index = 0
     for(let i = 0; i<players.length;i++){
-      if(players[i].position === randomBoost){
-        players[i].position += 2
-        console.log(`Player ${players[i].name} got booster !!`)
-      }
-      if(players[i].position === randomTrap){
-        players[i].position -= 2
-        console.log(`Player ${players[i].name} got trap !!`)
-      }
-      result.push(printLine(players[i].name,players[i].position).join(' '))
+      // if(players[i].position === randomBoost){
+      //   players[i].position += 2
+      //   console.log(`Player ${players[i].name} got booster !!`)
+      // }
+      // if(players[i].position === randomTrap){
+      //   players[i].position -= 2
+      //   console.log(`Player ${players[i].name} got trap !!`)
+      // }
+      console.log(printLine(players[i].name,players[i].position).join('|'))
     }
-    console.log(result)
-    // for(let i = 0; i<result.length; i++){
-    // } 
-  //     let temp = [];
-  //     result.push(printLine(pemain[i].name,pemain[i].position).join('')) ;
-  //     pemain[i].position += advance();
-    
-  //     // kalo udah ada yangmenang berarti pemainnya selanjutnya ngga boleh kocok dadu
-  //   }
-  //   console.log(result)
-  //   sleep()
-  //   clearScreen()
-  // }
-  // winner()
 }
 
-// printBoard()
 
 function printLine (playerName,playerPosition) {
   let result = [];
   for(let i = 0; i<track; i++){
-    if(playerPosition > track){
+    if(playerPosition >= track){
       playerPosition = track-1
     }
-    if(playerPosition === randomTrap){
-      result.push('$')
-    }
-    if(playerPosition === randomBoost){
-      result.push('%')
-    }
+    // if(playerPosition === randomTrap){
+    //   result.push('$')
+    // }
+    // if(playerPosition === randomBoost){
+    //   result.push('%')
+    // }
     if(playerPosition === i){
-      result.push(playerName+'|')
+      result.push(playerName)
     }
-    result.push('|')
+    result.push(' ')
   }
   return result
 }
 
 function advance(player){
   let diceRandom = diceRoll();
-
-  // let result = pemain.position+ diceRandom
-
-  return player.position + diceRandom;
+  return player.position += diceRandom;
 }
+
 
 function finished(){
   for(let i = 0; i<players.length;i++){
@@ -132,6 +112,7 @@ function clearScreen () {
 
 function startGame(){
   let indexPlayer = 0;
+  // console.log(players)
   while(finished() === false){
     printBoard();
     advance(players[indexPlayer]);
@@ -142,9 +123,8 @@ function startGame(){
       indexPlayer = 0
     }
   }
-  // console.log(advance(players[indexPlayer]))
-  // printBoard();
-  // console.log(winner())
+  printBoard();
+  console.log(winner())
 }
 
 //Driver Code
