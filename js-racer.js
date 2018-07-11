@@ -1,8 +1,8 @@
 "use strict"
 
 const input = process.argv.slice(2);
-const numOfPlayers = input[0];
-const trackLength = input[1];
+const numOfPlayers = Number(input[0]);
+const trackLength = Number(input[1]);
 
 if (numOfPlayers < 2){
   console.log('The minimum number of players is 2');
@@ -16,9 +16,9 @@ if (numOfPlayers >= 2 && trackLength >= 15){
 
 function race (numOfPlayers, trackLength){
   let players = generatePlayers(numOfPlayers);
-
-  printBoard(players, trackLength);
-  sleep(450);
+  let powerUps = generatePowerUps (numOfPlayers, trackLength);
+  printBoard(players, powerUps, trackLength);
+  sleep(750);
   clearScreen();
 
   while (!finished(players, trackLength)){
@@ -27,8 +27,8 @@ function race (numOfPlayers, trackLength){
       if (finished(players, trackLength)){
         return winner(players);
       }
-      printBoard(players, trackLength);
-      sleep(450);
+      printBoard(players, powerUps, trackLength);
+      sleep(750);
       clearScreen();
     }
   }
@@ -52,6 +52,16 @@ function generatePlayers (num) {
   return players;
 }
 
+function generatePowerUps (numOfPlayers, trackLength){
+  let powerUps = [];
+  
+  for (let i = 0; i < numOfPlayers; i++){
+    let PUPosition = 4 + Math.floor(Math.random() * (trackLength - 8))
+    powerUps.push(PUPosition)
+  }
+  return powerUps
+}
+
 function diceRoll () {
   return Math.ceil(Math.random() * 6);
 }
@@ -65,20 +75,28 @@ function sleep (milliseconds) {
   }
 }
 
-function printBoard (playersObj, trackLength) {
+function printBoard (playersObj, powerUpsPos, trackLength) {
   for (let i in playersObj){
-    printLine (playersObj[i], trackLength)
+    printLine (playersObj[i], powerUpsPos[i], trackLength);
   }
 }
 
-function printLine (playerObj, trackLength) {
+function printLine (playerObj, powerUpPos, trackLength) {
   let name = playerObj.name;
   let position = playerObj.position
   let line = [];
+  
+  if (position === powerUpPos){
+    position += 3;
+    playerObj.position = position
+    console.log(`${playerObj.name} got power-up! boosted by 3 km`)
+  }
 
   for(let i = 0; i < trackLength; i++){
     if (i === position){
       line.push (name)
+    } else if (i === powerUpPos){
+      line.push ('$')
     } else {
       line.push(' ')
     }
