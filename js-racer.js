@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 function diceRoll(row) {
 	//the value of dice is 1 to half of the track length
@@ -69,7 +69,7 @@ function startJsRacer(terminalInput){
 	let playerPosData = generatePLayer(howManyPlayer);
 	let winnerPlayer = "";
 	let stopGame = false;
-	
+
 	while(!stopGame){
 		for(let player = 0 ; player < howManyPlayer ; player++){
 			advance(String.fromCharCode(player+97), playerPosData, trackLength);
