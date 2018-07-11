@@ -11,7 +11,45 @@ if (trackLength < 15){
   console.log('Minimum length of the track is 15');
 }
 if (numOfPlayers >= 2 && trackLength >= 15){
+  race (numOfPlayers, trackLength)
+}
 
+function race (numOfPlayers, trackLength){
+  let players = generatePlayers(numOfPlayers);
+
+  printBoard(players, trackLength);
+  sleep(450);
+  clearScreen();
+
+  while (!finished(players, trackLength)){
+    for (let i in players){
+      advance(players[i]);
+      if (finished(players, trackLength)){
+        return winner(players);
+      }
+      printBoard(players, trackLength);
+      sleep(450);
+      clearScreen();
+    }
+  }
+}
+
+function generatePlayers (num) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let players = [];
+  let startingPosition = 0;
+
+  for (let i = 0; i < num; i++){
+    let indexRandom = Math.floor(Math.random () * alphabet.length);
+    let player = alphabet[indexRandom];
+    let playerObj = {
+      name: player,
+      position: startingPosition,
+    }
+
+    players.push(playerObj);
+  }
+  return players;
 }
 
 function diceRoll () {
@@ -27,37 +65,52 @@ function sleep (milliseconds) {
   }
 }
 
-function printBoard (numOfPlayers, trackLength) {
-
+function printBoard (playersObj, trackLength) {
+  for (let i in playersObj){
+    printLine (playersObj[i], trackLength)
+  }
 }
 
-function printLine (player, pos, trackLength) {
+function printLine (playerObj, trackLength) {
+  let name = playerObj.name;
+  let position = playerObj.position
   let line = [];
 
   for(let i = 0; i < trackLength; i++){
-    if (i === pos){
-      line.push (player)
+    if (i === position){
+      line.push (name)
     } else {
-      line.push('-')
+      line.push(' ')
     }
   }
-  return line.join('|');
+  line.push('|')
+  line.unshift('|')
+  console.log(line.join('|'));
 }
 
-
-console.log(printLine(0,0,trackLength));
-
-
-function advance (playersObj) {
-
+function advance (playerObj) {
+  let position = playerObj.position;
+  position += diceRoll();
+  playerObj.position = position;
+  
+  return playerObj;
 }
 
 function finished (playersObj, trackLength) {
-
+  for (let i in playersObj){
+    if (playersObj[i].position >= trackLength){
+      return true;
+    }
+  }
+  return false;
 }
 
 function winner (playersObj) {
-
+  for (let i in playersObj){
+    if (playersObj[i].position >= trackLength){
+      console.log(`Race is over, we got ${playersObj[i].name} as the winner!`) ;
+    }
+  }
 }
 
 function clearScreen () {
