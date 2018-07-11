@@ -1,7 +1,21 @@
 "use strict"
 
-function diceRoll () {
+const input = process.argv.slice(2);
+const numOfPlayers = input[0];
+const trackLength = input[1];
 
+if (numOfPlayers < 2){
+  console.log('The minimum number of players is 2');
+}
+if (trackLength < 15){
+  console.log('Minimum length of the track is 15');
+}
+if (numOfPlayers >= 2 && trackLength >= 15){
+
+}
+
+function diceRoll () {
+  return Math.ceil(Math.random() * 6);
 }
 
 function sleep (milliseconds) {
@@ -13,23 +27,36 @@ function sleep (milliseconds) {
   }
 }
 
-function printBoard () {
+function printBoard (numOfPlayers, trackLength) {
 
 }
 
-function printLine (player, pos) {
+function printLine (player, pos, trackLength) {
+  let line = [];
+
+  for(let i = 0; i < trackLength; i++){
+    if (i === pos){
+      line.push (player)
+    } else {
+      line.push('-')
+    }
+  }
+  return line.join('|');
+}
+
+
+console.log(printLine(0,0,trackLength));
+
+
+function advance (playersObj) {
 
 }
 
-function advance (player) {
+function finished (playersObj, trackLength) {
 
 }
 
-function finished () {
-
-}
-
-function winner () {
+function winner (playersObj) {
 
 }
 
