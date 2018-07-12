@@ -3,6 +3,7 @@
 const argv = process.argv
 const jumlahPlayer = argv[2]
 const panjangTrack = argv[3]
+const superPower = Math.floor(Math.random() * panjangTrack);
 
 if (jumlahPlayer >= 2 && panjangTrack >= 15) {
   const board = printBoard()
@@ -42,7 +43,8 @@ function printBoard () {
     for (let key in player) {
       if (player[key] === 0) {
         let trackLine = printLine(key, player[key])
-        player[key] += diceRoll()
+        //player[key] += diceRoll()
+        player[key] = 
         board.push(trackLine)
       } else {
         let lemparDaduPlayer = diceRoll(player[key])
@@ -80,6 +82,10 @@ function printLine (player, pos) {
 
 function winners (winner) {
   return `============== The Winner is ${winner} ==============`
+}
+
+function powerUp () {
+  
 }
 
 function clearScreen () {
