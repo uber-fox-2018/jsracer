@@ -35,7 +35,8 @@ function printBoard(track) {
     
     for (let i = 0; i < players.length; i++) {
         let midArr = []
-        if (players[i].position === 3 || players[i].position === 11) {
+        let powerUp = Math.floor(Math.random()*6)
+        if (players[i].position === powerUp) {
             players[i].position += 2
             console.log(`Player ${players[i].name} Get some Power`); 
         }
@@ -46,7 +47,7 @@ function printBoard(track) {
 
             if (players[i].position === j) {
                 midArr.push(players[i].name)
-            }else if (j === 3 || j === 11) {
+            }else if (j === powerUp) {
                 midArr.push('$')
             }else {
                 midArr.push(' ')
