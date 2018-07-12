@@ -13,22 +13,6 @@ if (trackLength < 15) {
   console.log('minimum length of the track is 15')
 }
 
-function createPlayer(player) {
-  let playerName = ['Wahyu', 'Andre', 'Wisnu', 'Brian', 'Riza', 'Oq', 'Ari', 'Helmi', 'FajarTC']
-  for (let i = 0; i < player; i++) {
-    let playerObj = {
-      name: playerName[i],
-      position: 0
-    }
-    playerArr.push(playerObj)
-  }
-  return playerArr
-}
-
-function diceRoll() {
-  return Math.trunc((Math.random() * 6)+1)
-}
-
 function sleep (milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
@@ -38,73 +22,83 @@ function sleep (milliseconds) {
   }
 }
 
-function printBoard (trackLength) {
+function createPlayer(player) {
+  let playerNames = ['Wahyu', 'Andre', 'Wisnu', 'Riza', 'Brian', 'Helmi', 'FajarTC']
+  for (let i = 0; i < player; i++) {
+    let playerObj = {
+      name: playerNames[i],
+      position: 0
+    }
+    playerArr.push(playerObj)
+  }
+  return playerArr
+}
+
+function dice() {
+  return Math.trunc(Math.random() * 6)
+}
+
+function printBoard(trackLength) {
   let mainBoard = []
-
-  // for (let i = 0; i < playerArr.length; i++) {
-  //   if(playerArr[i].position >= trackLength-1) {
-  //     playerArr[i].position = trackLength-1
-  //   }
-  // }
-
-  for(let i = 0; i < playerArr.length; i++) {
-    let temp = []
+  for (let i = 0; i < playerArr.length; i++) {
+    let miniBoard = []
+    let godMode = Math.trunc(Math.random() * 6)
+    if (playerArr[i].position === godMode) {
+      playerArr[i].position += 5
+      console.log(`${playerArr[i].name} is enter gode mode`)
+    }
     for (let j = 0; j < trackLength; j++) {
-
-      if(playerArr[i].position > trackLength) {
-            playerArr[i].position = trackLength-1
-          }
-
-      if (playerArr[i].position == j) {
-        temp.push(playerArr[i].name)
+      if (playerArr[i].position === j) {
+        miniBoard.push(playerArr[i].name)
+      } else if(j === godMode) {
+        miniBoard.push('G')
       } else {
-        temp.push("")
+        miniBoard.push('')
       }
     }
-    mainBoard.push(temp)
+    mainBoard.push(miniBoard)
   }
   for (let i = 0; i < mainBoard.length; i++) {
-    console.log(mainBoard[i].join(' | '))
+    console.log(mainBoard[i].join('  |  '))
   }
 }
 
-function advance (player) {
-  return player.position += diceRoll()
+function advance(player) {
+  return player.position += dice()
 }
 
-function readyPlayerOne() {
-  createPlayer(player)
-  let index = 0
-  while(finished() === false) {
-    printBoard(trackLength)
-    advance(playerArr[index])
-    sleep(400)
-    clearScreen()
-    index++
-    if(index == 3) {
-      index = 0
-    }
-  }
-  console.log(printBoard(trackLength));
-  
-  console.log(winner())
-}
-
-function finished (trackLength) {
-  for(let i = 0; i < playerArr.length; i++) {
-    if (playerArr[i].position == trackLength) {
-      return true
-    } 
-  }
-  return false
-} 
-
-function winner () {
+function finished() {
   for (let i = 0; i < playerArr.length; i++) {
     if (playerArr[i].position >= trackLength-1) {
+      return true
+    }
+  }
+  return false
+}
+
+function winner() {
+  for (let i = 0; i < playerArr.length; i++) {
+    if (playerArr[i].position === trackLength-1) {
       return `${playerArr[i].name} is the winner`
     }
   }
+}
+
+function readyPlayerOne() {
+  let indexPlayer = 0
+  createPlayer(player)
+  while(finished() === false) {
+    printBoard(trackLength)
+    advance(playerArr[indexPlayer])
+    sleep(500)
+    clearScreen()
+    indexPlayer++
+    if(indexPlayer === player) {
+      indexPlayer = 0
+    }
+  }
+  printBoard(trackLength)
+  console.log(winner())
 }
 
 function clearScreen () {
@@ -113,7 +107,4 @@ function clearScreen () {
   console.clear();
 }
 
-
 readyPlayerOne()
-// createPlayer(player)
-// console.log(finished())
