@@ -2,7 +2,7 @@
 const argv = process.argv.slice(2)
 var totalPlayer = Number(argv[0])
 var track = Number(argv[1])
-var player = advance(totalPlayer)
+var player = generatePlayer(totalPlayer)
 
 function diceRoll () {
     let dice = Math.floor(Math.random()*6)
@@ -29,9 +29,14 @@ function printBoard () {
       for(let i=0; i<totalPlayer; i++){
         console.log(printLine(player[i].name, player[i].position).join(''));
         // console.log(player[i].position);
+        if(player[i].position === 4){
+          player[i].position += 10
+          console.log('Kamu mendapatkan tenaga tambahan broooo !!!');
+          
+        }
         player[i].position += diceRoll()
       }
-      sleep()
+      sleep(3000)
       clearScreen()
     } 
     console.log(winner())
@@ -40,17 +45,20 @@ function printBoard () {
 
 function printLine (player, pos) {
     let lineBoard = []
+    let randomPower = Math.floor(Math.random() * (track - 8))
 
     for(let i=0; i<track; i++){
       if(pos === i){
         lineBoard.push(` ${player}|`)
+      }else if(i === randomPower){
+        lineBoard.push(` $|`)
       }
       lineBoard.push('  |')
     }
     return lineBoard
 }
 
-function advance (player) {
+function generatePlayer (player) {
   let alpha = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ'
   var players = []
 
@@ -88,6 +96,7 @@ function clearScreen () {
   // return process.stdout.write('\033c');
   console.clear();
 }
+
 
 printBoard()
 
