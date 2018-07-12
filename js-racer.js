@@ -35,8 +35,6 @@ function diceRoll () {
   return result
 }
 
-console.log(diceRoll())
-
 function sleep (milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
@@ -48,16 +46,17 @@ function sleep (milliseconds) {
 
 function printBoard() {
     for(let i = 0; i<players.length;i++){
-      // if(players[i].position === randomBoost){
-      //   players[i].position += 2
-      //   console.log(`Player ${players[i].name} got booster !!`)
-      // }
-      // if(players[i].position === randomTrap){
-      //   players[i].position -= 2
-      //   console.log(`Player ${players[i].name} got trap !!`)
-      // }
+      if(players[i].position === randomBoost){
+        players[i].position += 2
+        console.log(`Player ${players[i].name} got booster !!`)
+      }
+      if(players[i].position === randomTrap){
+        players[i].position -= 2
+        console.log(`Player ${players[i].name} got trap !!`)
+      }
       console.log(printLine(players[i].name,players[i].position).join('|'))
     }
+    return ''
 }
 
 
@@ -67,12 +66,12 @@ function printLine (playerName,playerPosition) {
     if(playerPosition >= track){
       playerPosition = track-1
     }
-    // if(playerPosition === randomTrap){
-    //   result.push('$')
-    // }
-    // if(playerPosition === randomBoost){
-    //   result.push('%')
-    // }
+    if(i === randomTrap){
+      result.push('$')
+    }
+    if(i === randomBoost){
+      result.push('%')
+    }
     if(playerPosition === i){
       result.push(playerName)
     }
@@ -89,7 +88,7 @@ function advance(player){
 
 function finished(){
   for(let i = 0; i<players.length;i++){
-    if(players[i].position >= track-1){
+    if(players[i].position >= track){
       return true
     }
   }
@@ -99,7 +98,7 @@ function finished(){
 function winner () {
   for(let i = 0; i<players.length; i++){
     if(players[i].position >= track){
-      console.log(`winner is ${players[i].name}`)
+      return (`winner is ${players[i].name}`)
     }
   }
 }
@@ -116,7 +115,7 @@ function startGame(){
   while(finished() === false){
     printBoard();
     advance(players[indexPlayer]);
-    sleep(500)
+    sleep(700)
     clearScreen()
     indexPlayer++
     if(indexPlayer === numOfPlayers){
@@ -125,6 +124,7 @@ function startGame(){
   }
   printBoard();
   console.log(winner())
+  return ''
 }
 
 //Driver Code
