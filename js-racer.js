@@ -41,7 +41,7 @@ function printBoard() {
 
 function printLine (player, pos) {
   let arr = [];
-  let powerUp = 5;
+  let powerUp = (Math.floor(Math.random() * trackLength - 5));
   
   for (let i = 0; i <= trackLength; i++) {
     if(pos === powerUp) {
@@ -49,16 +49,18 @@ function printLine (player, pos) {
       console.log('POWER UP!');
     }
     if (i === pos) {
-      arr.push('|   ' +player+ '');
-    } else if (i > trackLength) {
-      arr.push('|  |');
-    } else if(i === powerUp) {
-      arr.push('*')
+      arr.push(player);
+    } 
+    // else if (i > trackLength) {
+    //   arr.push('|   |');
+    // } 
+    else if(i === powerUp) {
+      arr.push('$')
     } else {
-      arr.push('|    ');
+      arr.push(' ');
     }
   }
-  return arr.join('');
+  return arr.join(' | ');
 }
 
 function advance (player) {
@@ -91,7 +93,7 @@ function race() {
     printBoard();
     let playerMovement = 0;
     while(finished() === false) {
-      sleep(500);
+      sleep(800);
       clearScreen();
       advance(listOfRacers[playerMovement]);
       playerMovement++;
