@@ -1,7 +1,11 @@
 "use strict"
 
-let player = 3
-let track = 15
+let argv = process.argv
+
+let player = Number(argv[2])
+let track = Number(argv[3])
+
+
 function diceRoll () {
   return Math.floor((Math.random()) * 6)
 }
@@ -30,26 +34,42 @@ function sleep (milliseconds) {
 
 
 function printBoard () {
-    let arr = []
-    for (let i = 0; i < totalPlayer.length; i++){
-      let dadu = diceRoll()
-      totalPlayer[i].position+=dadu
-      arr.push(printLine(totalPlayer[i].name,totalPlayer[i].position))
-    }
-  return arr
+  while (finished() === false){
+    let board = ''
+      for (let i = 0; i < totalPlayer.length; i++){
+        sleep(200)
+        if (totalPlayer[i].position === 0){
+          board+=printLine(totalPlayer[i].name,totalPlayer[i].position)+'\n'
+          let dadu = diceRoll()
+          totalPlayer[i].position+=dadu
+        } else {
+          let dadu = diceRoll()
+        if (totalPlayer[i].position+dadu <= track){
+          totalPlayer[i].position+=dadu
+        }
+        board+=printLine(totalPlayer[i].name,totalPlayer[i].position)+'\n'
+        }
+      }
+      clearScreen()
+      console.log(board)
+      console.log(totalPlayer)
+  }
 }
 
 
+printBoard()
 
 
 
-// sleep(500)
-// clearScreen()
+
+
+
+
 
 function printLine (player, pos) {
   // console.log(player,pos)
   let arr = []
-  for (let i = 0; i < track; i++){
+  for (let i = 0; i <= track; i++){
       if (i === pos){
         arr.push(player)
       } else {
@@ -73,13 +93,20 @@ function finished () {
       return winner()
     }
   }
-  console.log(printBoard())
+  return false
 }
 
-finished()
+
+
+
 
 
 function winner () {
+  for (let i = 0; i < totalPlayer.length; i++){
+    if (totalPlayer[i].position === track){
+      console.log(totalPlayer[i].name+' is the winner!') 
+    }
+  }
 }
 
 
