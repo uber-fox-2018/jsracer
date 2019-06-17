@@ -1,8 +1,26 @@
 "use strict"
 
-function diceRoll () {
+let argv = process.argv
 
+let player = Number(argv[2])
+let track = Number(argv[3])
+
+
+function diceRoll () {
+  return Math.floor((Math.random()) * 6)
 }
+let totalPlayer = []
+function generatePlayer(){
+  let obj = {}
+    let char = 'abcdefghijklmnopqrstuvwxyz'
+    for (let i = 0; i < player; i++){
+        obj['name'] = char[i]
+        obj['position'] = 0
+        totalPlayer.push(obj)
+        obj = {}
+    }
+}
+generatePlayer()
 
 function sleep (milliseconds) {
   var start = new Date().getTime();
@@ -13,25 +31,84 @@ function sleep (milliseconds) {
   }
 }
 
-function printBoard () {
 
+
+function printBoard () {
+  while (finished() === false){
+    let board = ''
+      for (let i = 0; i < totalPlayer.length; i++){
+        sleep(200)
+        if (totalPlayer[i].position === 0){
+          board+=printLine(totalPlayer[i].name,totalPlayer[i].position)+'\n'
+          let dadu = diceRoll()
+          totalPlayer[i].position+=dadu
+        } else {
+          let dadu = diceRoll()
+        if (totalPlayer[i].position+dadu <= track){
+          totalPlayer[i].position+=dadu
+        }
+        board+=printLine(totalPlayer[i].name,totalPlayer[i].position)+'\n'
+        }
+      }
+      clearScreen()
+      console.log(board)
+      console.log(totalPlayer)
+  }
 }
+
+
+printBoard()
+
+
+
+
+
+
+
 
 function printLine (player, pos) {
-
+  // console.log(player,pos)
+  let arr = []
+  for (let i = 0; i <= track; i++){
+      if (i === pos){
+        arr.push(player)
+      } else {
+        arr.push(' ')
+      }
+  }
+  return arr.join('|')
 }
+
 
 function advance (player) {
-
+   var newPos = player += diceRoll()
+  return newPos
 }
+
+
 
 function finished () {
-
+  for (let i = 0; i < totalPlayer.length; i ++){
+    if (totalPlayer[i].position===track){
+      return winner()
+    }
+  }
+  return false
 }
+
+
+
+
+
 
 function winner () {
-
+  for (let i = 0; i < totalPlayer.length; i++){
+    if (totalPlayer[i].position === track){
+      console.log(totalPlayer[i].name+' is the winner!') 
+    }
+  }
 }
+
 
 function clearScreen () {
   // Un-comment this line if you have trouble with console.clear();
